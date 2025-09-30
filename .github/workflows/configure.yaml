@@ -1,0 +1,32 @@
+name: Configure Web
+
+on: 
+  push: 
+    branches:
+      - master
+      - main
+      - deploy
+
+jobs: 
+  configure_job: 
+    runs-on: self-hosted
+    steps: 
+      - name: Echo status
+        run: |
+          echo "Everything works fine!!!"
+          echo "------------------------"
+          echo "---"
+
+      - name: Install Nginx
+        run: |
+          sudo apt update
+          sudo apt install -y nginx
+
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Deploy to /var/www/html
+        run: |
+          sudo rm -rf /var/www/html/*
+          sudo cp -r ./* /var/www/html/
+          sudo systemctl restart nginx
